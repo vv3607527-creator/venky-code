@@ -63,7 +63,7 @@ test('the website renders the unchanged LICENSE verbatim and makes its attributi
   const license = await readFile(join(root, 'LICENSE'), 'utf8');
   const page = await readFile(join(root, 'website/src/pages/license.astro'), 'utf8');
   const { licenseTextToHtml } = await import('../website/src/lib/license-html.mjs');
-  assert.match(page, /readFile\(new URL\('\.\.\/\.\.\/\.\.\/LICENSE', import\.meta\.url\), 'utf8'\)/);
+  assert.match(page, /readFile\(new URL\('\.\.\/\.\.\/\.\.\/\.\.\/LICENSE', import\.meta\.url\), 'utf8'\)/);
   assert.match(page, /licenseTextToHtml\(licenseText\)/);
   assert.match(page, /set:html=\{licenseHtml\}/);
   assert.doesNotMatch(page, /This is a fork of VENKY Code|VENKY Code License/);
