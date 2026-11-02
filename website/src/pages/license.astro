@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import Page from '../layouts/Page.astro';
 import { licenseTextToHtml } from '../lib/license-html.mjs';
 
-const licenseText = await readFile(new URL('../../../LICENSE', import.meta.url), 'utf8');
+const licenseText = await readFile(new URL('../../../../LICENSE', import.meta.url), 'utf8');
 const licenseHtml = licenseTextToHtml(licenseText);
 ---
 <Page title="License" current="license" eyebrow="LICENSE" heading="License" description="License text.">

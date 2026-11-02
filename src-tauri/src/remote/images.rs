@@ -29,6 +29,8 @@ const MAX_CHUNKS: usize = MAX_BYTES.div_ceil(CHUNK);
 /// the bucket and 2 frames a second stay free for requests, prompts and events.
 const BURST: f64 = 80.0;
 const RATE: f64 = 18.0;
+// Keep image uploads below the relay's burst and sustained-rate ceilings.
+const _: [(); 1] = [(); (BURST < 100.0 && RATE < 20.0) as usize];
 /// Chunks sent but not yet answered. The host runs `image.put` in arrival order on one
 /// lane per computer (`socket.rs`), so a window keeps the link busy without reordering.
 const WINDOW: usize = 8;
@@ -447,7 +449,6 @@ mod tests {
     fn the_frame_budget_spends_a_burst_then_refills_below_the_relay_rate() {
         let start = Instant::now();
         let mut budget = Budget::new(start);
-        assert!(BURST < 100.0 && RATE < 20.0, "headroom under the relay's 100 burst and 20/s");
         for _ in 0..BURST as usize {
             assert_eq!(budget.take(start), Duration::ZERO);
         }

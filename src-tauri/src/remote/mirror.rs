@@ -130,6 +130,9 @@ fn status_after(current: &str, kind: &str) -> Option<&'static str> {
     (next != current).then_some(next)
 }
 
+type SessionCursor = (String, u64);
+type DirtyHostSnapshot = (String, String, Vec<SessionCursor>);
+
 /// What this computer, as a viewer, keeps in memory about its mirrors.
 #[derive(Default)]
 pub(crate) struct Viewer {
@@ -251,7 +254,7 @@ impl Viewer {
     }
 
     /// What to save: each changed host's epoch and positions.
-    fn unsaved(&mut self) -> Vec<(String, String, Vec<(String, u64)>)> {
+    fn unsaved(&mut self) -> Vec<DirtyHostSnapshot> {
         let dirty = std::mem::take(&mut self.dirty);
         dirty.into_iter().filter_map(|device| {
             let epoch = self.epochs.get(&device)?.clone();

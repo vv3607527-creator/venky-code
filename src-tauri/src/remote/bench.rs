@@ -215,6 +215,10 @@ fn broadcast_presence(state: &RelayState, hop: Duration) {
 
 async fn serve(tcp: tokio::net::TcpStream, state: Arc<Mutex<RelayState>>, profile: Profile) {
     let mut device = String::new();
+    #[expect(
+        clippy::result_large_err,
+        reason = "tokio-tungstenite requires ErrorResponse by value in this handshake callback"
+    )]
     let callback = |request: &WsRequest, response: WsResponse| -> Result<WsResponse, ErrorResponse> {
         device = request.headers().get("authorization").and_then(|v| v.to_str().ok()).and_then(|v| v.strip_prefix("Bearer ")).unwrap_or_default().to_owned();
         Ok(response)

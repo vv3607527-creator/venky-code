@@ -479,7 +479,7 @@ mod tests {
             "TEST_SECRET_NOT_A_REAL_CREDENTIAL",
             "TEST_SESSION_NOT_A_REAL_CREDENTIAL",
         );
-        assert_eq!(scrub_aws(&json), r#"{"AccessKeyId": "[redacted]", "SecretAccessKey": "[redacted]", "SessionToken": "[redacted]"}"#);
+        assert_eq!(scrub_aws(&json), r#"{"AccessKeyId":"[redacted]","SecretAccessKey":"[redacted]","SessionToken":"[redacted]"}"#);
         let env = format!("export AWS_ACCESS_KEY_ID={}\nexport AWS_SECRET_ACCESS_KEY=wJalr/XUtn\naws_session_token = tok\nok", test_access_key);
         assert_eq!(scrub_aws(&env), "export AWS_ACCESS_KEY_ID=[redacted]\nexport AWS_SECRET_ACCESS_KEY=[redacted]\naws_session_token = [redacted]\nok");
         assert_eq!(scrub_aws("upload: ./a.txt to s3://AKIA-bucket/é"), "upload: ./a.txt to s3://AKIA-bucket/é");
