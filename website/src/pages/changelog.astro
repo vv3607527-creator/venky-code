@@ -1,0 +1,45 @@
+---
+/* Every versioned development note, newest first, from releases/X.Y.Z.md. */
+import Page from '../layouts/Page.astro';
+import { releases, formatDate } from '../lib/changelog';
+const [latest] = releases;
+const id = (version: string) => `v${version.replace(/\./g, '-')}`;
+const months = releases.reduce<{ label: string; versions: string[] }[]>((groups, release) => {
+  const label = release.date ? new Date(`${release.date}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }) : 'Earlier';
+  const last = groups.at(-1);
+  return last?.label === label ? [...groups.slice(0, -1), { label, versions: [...last.versions, release.version] }] : [...groups, { label, versions: [release.version] }];
+}, []);
+---
+<Page title="Changelog" current="changelog" eyebrow="LITTLE BY LITTLE"
+  heading="What’s new in VENKY Code."
+  description={`VENKY Code development notes, newest first. Latest note: ${latest.version}${latest.date ? `, ${formatDate(latest.date)}` : ''}.`}
+  lede={`${releases.length} historical development notes. Older installer/update references do not mean artifacts are available; this candidate has no verified downloads.`}>
+  <div slot="hero" class="changelog-latest page-rise">
+    <span class="live-dot" aria-hidden="true"></span>Latest note <a href={`#${id(latest.version)}`}>{latest.version}</a>{latest.date && <> · <time datetime={latest.date}>{formatDate(latest.date)}</time></>}
+  </div>
+
+  <div class="changelog-layout section-width">
+    <nav class="changelog-rail" aria-label="Development notes">
+      {months.map(month => <div class="rail-month"><p>{month.label}</p><ul>{month.versions.map(version => <li><a href={`#${id(version)}`} data-rail={id(version)}>{version}</a></li>)}</ul></div>)}
+    </nav>
+    <ol class="changelog-list">
+      {releases.map((release, index) => (
+        <li class="release reveal" id={id(release.version)} aria-labelledby={`${id(release.version)}-title`}>
+          <div class="release-marker" aria-hidden="true"><span></span></div>
+          <div class="release-meta">
+            <h2 id={`${id(release.version)}-title`}><a href={`#${id(release.version)}`}>{release.version}</a></h2>
+            {index === 0 && <span class="release-badge">Latest note</span>}
+            {release.date && <time datetime={release.date}>{formatDate(release.date)}</time>}
+          </div>
+          <div class="release-body">
+            {release.title && <h3>{release.title}</h3>}
+            {release.blocks.map(block => block.kind === 'list'
+              ? <ul>{block.items.map(item => <li><Fragment set:html={item.html} />{item.children.length > 0 && <ul>{item.children.map(child => <li set:html={child} />)}</ul>}</li>)}</ul>
+              : <p set:html={block.html} />)}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+  <p class="changelog-note section-width">VENKY Code is an Alpha preview. Verified desktop release artifacts are not available yet. Build from source; this changelog does not provide download links.</p>
+</Page>

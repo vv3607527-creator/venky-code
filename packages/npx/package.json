@@ -1,0 +1,12 @@
+{
+  "name": "venky",
+  "version": "0.3.16",
+  "description": "Install VENKY Code, the open-source desktop app for coding agents, with npx venky.",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "bin": { "venky": "bin/venky.mjs" },
+  "files": ["bin", "installer.mjs", "icon.png", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "repository": { "type": "git", "url": "git+https://github.com/vv3607527-creator/venky-code.git", "directory": "packages/npx" },
+  "homepage": "https://github.com/vv3607527-creator/venky-code"
+}

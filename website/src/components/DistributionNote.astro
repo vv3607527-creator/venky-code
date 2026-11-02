@@ -1,0 +1,10 @@
+---
+import { distribution } from '../lib/distribution';
+interface Props { id: string }
+const { id } = Astro.props;
+---
+{distribution.hasNote && (
+  <p id={id} class="distribution-note" role="note">
+    <strong>Downloads unavailable</strong> · {distribution.availability}
+  </p>
+)}

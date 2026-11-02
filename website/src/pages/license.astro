@@ -1,0 +1,23 @@
+---
+import { readFile } from 'node:fs/promises';
+import Page from '../layouts/Page.astro';
+import { licenseTextToHtml } from '../lib/license-html.mjs';
+
+const licenseText = await readFile(new URL('../../../LICENSE', import.meta.url), 'utf8');
+const licenseHtml = licenseTextToHtml(licenseText);
+---
+<Page title="License" current="license" eyebrow="LICENSE" heading="License" description="License text.">
+  <article class="legal-prose license-content section-width" aria-label="License text">
+    <section id="license" aria-label="License text">
+      <pre class="license-text" set:html={licenseHtml}></pre>
+    </section>
+  </article>
+</Page>
+
+<style>
+  .license-content { padding-block: 70px 90px; }
+  .license-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+  @media (max-width: 860px) {
+    .license-content { padding-block: 40px 60px; }
+  }
+</style>

@@ -1,0 +1,13 @@
+// The site at https://venky.bambooed.ai: a separate Worker from `venky-site`
+// (wrangler.jsonc) with the same static assets, so deploying one never touches the other.
+// Build first, then `npx wrangler deploy -c wrangler.bambooed.jsonc`.
+{
+  "name": "venky-site-bambooed",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "routes": [{ "pattern": "venky.bambooed.ai", "custom_domain": true }]
+}
